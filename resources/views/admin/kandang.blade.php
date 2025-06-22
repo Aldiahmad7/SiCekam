@@ -278,117 +278,107 @@
 </div>
 
 <script>
-function editBlok(id) {
-    // Show modal
-    document.getElementById('editModal').classList.remove('hidden');
+    function editBlok(id) {
+        document.getElementById('editModal').classList.remove('hidden');
 
-    // Set form action URL - adjust this according to your route
-    document.getElementById('editForm').action = `/admin/kandang/${id}`;
+        document.getElementById('editForm').action = `/admin/kandang/${id}`;
 
-    // Fetch current data and populate form
-    fetch(`/admin/kandang/${id}/edit`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('editBlok').value = data.blok || '';
-            document.getElementById('editJumlahAyam').value = data.jumlah_ayam || '';
-            document.getElementById('editAyamSakit').value = data.ayam_sakit || '';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Gagal memuat data blok');
-        });
-}
-
-function closeEditModal() {
-    document.getElementById('editModal').classList.add('hidden');
-}
-
-// Validasi: Ayam sakit tidak boleh lebih dari jumlah ayam
-document.getElementById('editAyamSakit').addEventListener('input', function () {
-    const jumlahAyam = parseInt(document.getElementById('editJumlahAyam').value) || 0;
-    const ayamSakit = parseInt(this.value) || 0;
-
-    if (ayamSakit > jumlahAyam) {
-        alert('Jumlah ayam sakit tidak boleh melebihi jumlah ayam!');
-        this.value = jumlahAyam;
+        fetch(`/admin/kandang/${id}/edit`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('editBlok').value = data.blok || '';
+                document.getElementById('editJumlahAyam').value = data.jumlah_ayam || '';
+                document.getElementById('editAyamSakit').value = data.ayam_sakit || '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Gagal memuat data blok');
+            });
     }
-});
 
-function deleteBlok(id) {
-    // Create custom confirmation modal content
-    const confirmationHtml = `
-        <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm transform transition-all">
-                <div class="p-6 text-center">
-                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
-                        <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Konfirmasi Hapus</h3>
-                    <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus blok kandang ini? Tindakan ini tidak dapat dibatalkan.</p>
+    function closeEditModal() {
+        document.getElementById('editModal').classList.add('hidden');
+    }
 
-                    <div class="flex space-x-3">
-                        <button onclick="this.closest('.fixed').remove()"
-                            class="flex-1 px-4 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors font-medium">
-                            Batal
-                        </button>
-                        <button onclick="confirmDelete(${id})"
-                            class="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all font-medium shadow-sm">
-                            <i class="fas fa-trash mr-2"></i>Hapus
-                        </button>
+    document.getElementById('editAyamSakit').addEventListener('input', function () {
+        const jumlahAyam = parseInt(document.getElementById('editJumlahAyam').value) || 0;
+        const ayamSakit = parseInt(this.value) || 0;
+
+        if (ayamSakit > jumlahAyam) {
+            alert('Jumlah ayam sakit tidak boleh melebihi jumlah ayam!');
+            this.value = jumlahAyam;
+        }
+    });
+
+    function deleteBlok(id) {
+        const confirmationHtml = `
+            <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm transform transition-all">
+                    <div class="p-6 text-center">
+                        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
+                            <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Konfirmasi Hapus</h3>
+                        <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus blok kandang ini? Tindakan ini tidak dapat dibatalkan.</p>
+
+                        <div class="flex space-x-3">
+                            <button onclick="this.closest('.fixed').remove()"
+                                class="flex-1 px-4 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors font-medium">
+                                Batal
+                            </button>
+                            <button onclick="confirmDelete(${id})"
+                                class="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all font-medium shadow-sm">
+                                <i class="fas fa-trash mr-2"></i>Hapus
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
 
-    document.body.insertAdjacentHTML('beforeend', confirmationHtml);
-}
-
-function confirmDelete(id) {
-    // Create form for DELETE request
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = `/admin/kandang/${id}`;
-
-    // Add CSRF token
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const csrfInput = document.createElement('input');
-    csrfInput.type = 'hidden';
-    csrfInput.name = '_token';
-    csrfInput.value = csrfToken;
-    form.appendChild(csrfInput);
-
-    // Add method override for DELETE
-    const methodInput = document.createElement('input');
-    methodInput.type = 'hidden';
-    methodInput.name = '_method';
-    methodInput.value = 'DELETE';
-    form.appendChild(methodInput);
-
-    // Submit form
-    document.body.appendChild(form);
-    form.submit();
-}
-
-function tutupModal() {
-    document.getElementById('modalTambahBlok').classList.add('hidden');
-}
-
-// Close modal when clicking outside
-document.getElementById('editModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeEditModal();
+        document.body.insertAdjacentHTML('beforeend', confirmationHtml);
     }
-});
 
-document.getElementById('modalTambahBlok').addEventListener('click', function(e) {
-    if (e.target === this) {
-        tutupModal();
+    function confirmDelete(id) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/admin/kandang/${id}`;
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = csrfToken;
+        form.appendChild(csrfInput);
+
+        const methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        methodInput.value = 'DELETE';
+        form.appendChild(methodInput);
+
+        document.body.appendChild(form);
+        form.submit();
     }
-});
 
-document.getElementById('btnTambahBlok').addEventListener('click', function () {
-    document.getElementById('modalTambahBlok').classList.remove('hidden');
-});
+    function tutupModal() {
+        document.getElementById('modalTambahBlok').classList.add('hidden');
+    }
+
+    document.getElementById('editModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeEditModal();
+        }
+    });
+
+    document.getElementById('modalTambahBlok').addEventListener('click', function(e) {
+        if (e.target === this) {
+            tutupModal();
+        }
+    });
+
+    document.getElementById('btnTambahBlok').addEventListener('click', function () {
+        document.getElementById('modalTambahBlok').classList.remove('hidden');
+    });
 </script>
 @endsection

@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        // User Biasa
+        // User
         User::create([
             'name' => 'Regular User',
             'email' => 'messi@gmail.com',

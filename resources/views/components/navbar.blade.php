@@ -86,7 +86,6 @@
 
             <div class="hidden md:flex items-center">
                 @if($isAdmin)
-                    {{-- Admin tidak menampilkan tombol login/logout di navbar ini --}}
                 @elseif(Auth::check())
                     <form action="{{ route('logout') }}" method="POST" class="ml-4">
                         @csrf
