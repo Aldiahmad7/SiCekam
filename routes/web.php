@@ -56,10 +56,6 @@ Route::middleware(['auth', 'verified', RoleMiddleware::class . ':admin'])->group
     Route::delete('/admin/akun/{id}', [AdminController::class, 'destroy'])->name('akun.destroy');
     Route::post('/admin/blok', [AdminController::class, 'storeBlok'])->name('blok.store');
 
-    // Route::get('/admin', function () {
-    //     return view('admin.admin');
-    // })->name('admin.dashboard');
-
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
 

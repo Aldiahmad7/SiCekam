@@ -30,8 +30,7 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        // Redirect setelah registrasi berhasil
-        return redirect()->route('login.page')->with('success', 'Akun berhasil dibuat. Silakan login.');
+        return redirect()->route('login.page')->with('success', 'Akun berhasil dibuat. Silakan login.');
     }
 
     // LOGIN

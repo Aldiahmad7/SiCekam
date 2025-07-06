@@ -269,7 +269,7 @@
                 const result = await response.json();
                 if (result.success) {
                     alert('Ayam sakit berhasil ditambahkan');
-                    document.getElementById('btn-tambah').style.display = 'none'; // Hanya sekali klik
+                    document.getElementById('btn-tambah').style.display = 'none';
                 } else {
                     alert(result.message || 'Gagal menambah data ayam sakit');
                 }
@@ -279,7 +279,6 @@
             }
         });
 
-        // Fungsi untuk menampilkan/menyembunyikan tombol berdasarkan status ayam
         function toggleSickButton(isSick) {
             const btnSakit = document.getElementById('btn-tambah');
             if (btnSakit) {

@@ -83,9 +83,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Animasi loading
         document.addEventListener('DOMContentLoaded', function() {
-            // Animate summary cards
             const cards = document.querySelectorAll('.group');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
@@ -100,7 +98,6 @@
 
         const ctx = document.getElementById('distributionChart').getContext('2d');
 
-        // Gradient untuk chart
         const gradient = ctx.createLinearGradient(0, 0, 0, 400);
         gradient.addColorStop(0, 'rgba(79, 70, 229, 0.8)');
         gradient.addColorStop(0.5, 'rgba(124, 58, 237, 0.6)');
@@ -207,7 +204,6 @@
     </script>
 
     <style>
-        /* Custom animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -223,18 +219,15 @@
             animation: fadeInUp 0.6s ease-out forwards;
         }
 
-        /* Glassmorphism effect */
         .backdrop-blur-xl {
             backdrop-filter: blur(16px);
         }
 
-        /* Hover effects */
         .group:hover .fas {
             transform: scale(1.1);
             transition: transform 0.2s ease;
         }
 
-        /* Progress bar animation */
         #healthPercentage {
             background-size: 200% 100%;
             animation: shimmer 3s infinite;

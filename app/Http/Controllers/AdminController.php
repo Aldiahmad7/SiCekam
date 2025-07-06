@@ -6,7 +6,6 @@ use App\Models\Scan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -68,7 +67,7 @@ class AdminController extends Controller
             ->with('success', 'Blok kandang "'.$request->blok.'" berhasil ditambahkan.');
     }
 
-public function dashboard()
+    public function dashboard()
     {
         $totalBlok = DB::table('scans')->distinct('blok')->count('blok');
         $totalAyam = DB::table('scans')->sum('jumlah_ayam');
